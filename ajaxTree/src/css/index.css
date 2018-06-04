@@ -1,0 +1,28 @@
+#ajaxTree {
+  border: 1px solid #9f9f9f;
+  display: inline-block;
+}
+#ajaxTree ul {
+  padding: 0;
+  margin: 0;
+}
+#ajaxTree ul li {
+  color: #9f9f9f;
+  margin: 0;
+  list-style: none;
+  padding: 5px 30px;
+  position: relative;
+}
+#ajaxTree ul li span {
+  vertical-align: middle;
+}
+#ajaxTree ul li a {
+  vertical-align: middle;
+  cursor: pointer;
+  float: left;
+  border: solid 5px #9f9f9f;
+  border-bottom-color: transparent ;
+  border-right-color: transparent ;
+  border-top-color: transparent ;
+}
+/*# sourceMappingURL=index.css.map */
