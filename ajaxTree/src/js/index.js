@@ -23,10 +23,11 @@ class AjaxTree {
             let resultEl = null;
             if (nodeData && nodeData.length > 0) {
                 if (liEl.dataset.expand == 'true') {
-                    let rmELs = liEl.querySelectorAll('ul');
-                    rmELs.forEach(val => {
-                        liEl.removeChild(val);
-                    })
+                    let rmELs = liEl.getElementsByTagName('ul');
+                    for (let i = 0; i < rmELs.length; i++) {
+                        debugger
+                        liEl.removeChild(rmELs[i]);
+                    }
                     liEl.dataset.expand = false;
                 } else {
                     resultEl = this.createunExpandListEls(nodeData);
@@ -84,7 +85,6 @@ class AjaxTree {
                 return itemEl
             }
         };
-
         //推送到指定容器;
         let resultEl = null;
         if (isExpand) {
