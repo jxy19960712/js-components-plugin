@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>demo</title>
     <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
@@ -13,4 +13,67 @@
 </div>
 </body>
 <script src="../js/index.js"></script>
+<script>
+    new AjaxTree({
+        id: '#ajaxTree',
+        data: [
+            {
+                value: 'data1',
+                nodeCode: '0',
+                children: [
+                    {
+                        value: 'data1-1',
+                        nodeCode: '00',
+                        children: [
+                            {
+                                value: 'data1-1-1',
+                                nodeCode: '00'
+                            },
+                            {
+                                value: 'data1-2-1',
+                                nodeCode: '01'
+                            },
+                        ]
+                    },
+                    {
+                        value: 'data1-2',
+                        nodeCode: '01'
+                    },
+                ]
+            },
+            {
+                value: 'data2',
+                nodeCode: '1',
+                children: [
+                    {
+                        value: 'data2-1',
+                        nodeCode: '00'
+                    },
+                    {
+                        value: 'data2-2',
+                        nodeCode: '01'
+                    },
+                ]
+            },
+            {
+                value: 'data3',
+                nodeCode: '2'
+            },
+            {
+                value: 'data4',
+                nodeCode: '3'
+            },
+            {
+                value: 'data5',
+                nodeCode: '4'
+            }
+        ],
+        itemKey: {
+            label: 'value',
+            id: 'nodeCode',
+            children: 'children'
+        },
+        isExpand: false
+    });
+</script>
 </html>
