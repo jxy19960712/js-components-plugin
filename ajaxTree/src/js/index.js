@@ -11,25 +11,39 @@ class AjaxTree {
         }
         //节点事件
         this.subNode = (e) => {
+            let liEl = e.target.parentNode;
             let nodeData = this.subNode.prototype.children;
-            let result = this.createunExpandListEls(nodeData);
-            if(nodeData&&nodeData.length>0){
-                e.target.parentNode.appendChild(result);
+            let resultEl = null;
+            if (nodeData && nodeData.length > 0) {
+                if (liEl.dataset.expand == 'true') {
+                    let rmELs = liEl.querySelectorAll('ul');
+                    rmELs.forEach(val => {
+                        liEl.removeChild(val);
+                    })
+                    liEl.dataset.expand = false;
+                } else {
+                    resultEl = this.createunExpandListEls(nodeData);
+                    liEl.appendChild(resultEl);
+                    liEl.dataset.expand = true;
+                }
             }
         };
         //创建未展开状态list数据元素;
-        this.createunExpandListEls = (data, containElName, itemElName) => {
+        this.createunExpandListEls = (data) => {
             if (data && data.length > 0) {
                 const containEL = document.createElement('ul');
                 data.forEach(val => {
                     const itemEl = document.createElement('li');
                     itemEl.dataset.itemId = val[itemKey.id];
-                    const expandBtn = document.createElement('a');
                     const labelEl = document.createElement('span');
                     labelEl.innerHTML = val[itemKey.label];
-                    this.bindSubNode(expandBtn, val);
+                    if (val.children && val.children.length > 0) {
+                        itemEl.dataset.expand = false;
+                        const expandBtn = document.createElement('a');
+                        this.bindSubNode(expandBtn, val);
+                        itemEl.appendChild(expandBtn);
+                    }
                     itemEl.appendChild(labelEl);
-                    itemEl.appendChild(expandBtn);
                     containEL.appendChild(itemEl);
                 });
                 return containEL;
@@ -48,20 +62,15 @@ class AjaxTree {
                 return resultEl
             }
             else if (type == 'Object') {
-                let itemEl = document.createElement('li');
-                let expandBtn = document.createElement('a');
-                let labelEl = document.createElement('span');
-                expandBtn.addEventListener('click', (e) => {
-                    this.subNode.prototype = data;
-                    this.subNode(e);
-                });
+                const itemEl = document.createElement('li');
+                const expandBtn = document.createElement('a');
+                const labelEl = document.createElement('span');
                 this.bindSubNode(expandBtn, data);
-
-
                 labelEl.innerHTML = data[itemKey.label];
                 itemEl.dataset.itemId = data[itemKey.id];
                 itemEl.appendChild(labelEl);
                 if (data[itemKey.children] && data[itemKey.children].length > 0) {
+                    itemEl.dataset.expand = true;
                     itemEl.appendChild(expandBtn);
                     itemEl.appendChild(this.createExpandedListEls(data[itemKey.children]));
                 }
@@ -71,14 +80,15 @@ class AjaxTree {
 
 
         //推送到指定容器;
-        let result = null;
+        let resultEl = null;
         if (isExpand) {
-            result = this.createExpandedListEls(data);
+            resultEl = this.createExpandedListEls(data);
         } else {
-            result = this.createunExpandListEls(data);
+            resultEl = this.createunExpandListEls(data);
         }
-        this.contain.appendChild(result);
+        this.contain.appendChild(resultEl);
     };
+
     getType(obj) {
         const type = Object.prototype.toString.call(obj);
         if (type == '[object Array]') return 'Array'

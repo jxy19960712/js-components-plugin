@@ -21,8 +21,20 @@
   cursor: pointer;
   float: left;
   border: solid 5px #9f9f9f;
-  border-bottom-color: transparent ;
-  border-right-color: transparent ;
-  border-top-color: transparent ;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+}
+#ajaxTree ul [data-expand="true"] > a {
+  border: solid 5px #9f9f9f;
+  border-bottom-color: transparent !important;
+  border-right-color: transparent !important;
+  border-left-color: transparent !important;
+}
+#ajaxTree ul [data-expand="false"] > a {
+  border: solid 5px #9f9f9f;
+  border-bottom-color: transparent !important;
+  border-right-color: transparent !important;
+  border-top-color: transparent !important;
 }
 /*# sourceMappingURL=index.css.map */
