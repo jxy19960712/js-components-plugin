@@ -31,21 +31,16 @@ class AjaxTree {
                 let itemEl = document.createElement('li');
                 let expandBtn = document.createElement('a');
                 let labelEl = document.createElement('span');
-                for (let key in data) {
-                    if (key == 'value') {
-                        labelEl.innerHTML = data[key];
-                        itemEl.appendChild(labelEl);
-                        itemEl.appendChild(expandBtn);
-                    }
-                    else if (key == 'nodeCode') {
-                        itemEl.dataset.itemId = data[key];
-                    } else {
-                        itemEl.appendChild(this.createExpandedListEls(data[key]))
-                    }
+                labelEl.innerHTML = data[itemKey.label];
+                itemEl.dataset.itemId = data[itemKey.id];
+                itemEl.appendChild(labelEl);
+                if(data[itemKey.children]&&data[itemKey.children].length>0){
+                    itemEl.appendChild(expandBtn);
+                    itemEl.appendChild(this.createExpandedListEls(data[itemKey.children]));
                 }
                 return itemEl
             }
-        }
+        };
         //推送到指定容器;
         var result = null;
         if (isExpand) {
@@ -61,8 +56,8 @@ class AjaxTree {
             });
         }
         this.contain.appendChild(result);
-        
     };
+
     getType(obj) {
         const type = Object.prototype.toString.call(obj);
         if (type == '[object Array]') return 'Array'
@@ -128,6 +123,7 @@ let ajaxTree = new AjaxTree({
     itemKey: {
         label: 'value',
         id: 'nodeCode',
+        children:'children'
     },
-    isExpand:true
+    isExpand: true
 });
