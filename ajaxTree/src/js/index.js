@@ -1,3 +1,10 @@
+// ============================================
+//option说明:
+//id  放置组件容器元素的id;
+//data  树形结构的数据;
+//itemKey  树组件每一项的展示key与data中每一项的key相对照;
+//isExpand  初始化是否展开全部;
+// ============================================
 class AjaxTree {
     constructor({id, data, itemKey, isExpand}) {
         //指定容器;
@@ -77,7 +84,6 @@ class AjaxTree {
                 return itemEl
             }
         };
-
 
         //推送到指定容器;
         let resultEl = null;
