@@ -13,6 +13,7 @@
 </div>
 </body>
 <script src="../js/index.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
     let syncData = [
         {
@@ -33,11 +34,11 @@
                             children: [
                                 {
                                     value: 'data1-1-2-1',
-                                    nodeCOde: '0121'
+                                    nodeCode: '0121'
                                 },
                                 {
                                     value: 'data1-1-2-2',
-                                    nodeCOde: '0122'
+                                    nodeCode: '0122'
                                 }
                             ]
                         },
@@ -92,7 +93,6 @@
         children: 'children'
     };
 
-
     let asyncData = [
         {
             label: 'data1',
@@ -112,12 +112,12 @@
                             children: [
                                 {
                                     label: 'data1-1-2-1',
-                                    nodeCOde: '0121'
+                                    nodeCode: '0121'
                                 },
                                 {
                                     label: 'data1-1-2-2',
-                                    nodeCOde: '0122',
-                                    children:[]
+                                    nodeCode: '0122',
+                                    children: []
                                 }
                             ]
                         },
@@ -156,8 +156,21 @@
         id: '#ajaxTree',
         data: asyncData,
         itemKey: asyncKey,
-        isExpand: false,
-        isAsync: true
+        isExpand: true,
+        isAsync: true,
+        loadNode(nodeData, reslove, reject) {
+            setTimeout(() => {
+                reslove([{
+                    label: '呵呵呵',
+                    nodeCode: '1111111',
+                    children: []
+                }, {
+                    label: '嘻嘻嘻',
+                    nodeCode: '2222222',
+                    children: []
+                }])
+            }, 1000)
+        }
     });
 </script>
 </html>

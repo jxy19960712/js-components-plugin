@@ -4,18 +4,19 @@
 //data  树形结构的数据;
 //itemKey  树组件每一项的展示key与data中每一项的key相对照;
 //isExpand  初始化是否展开全部;
+//loadNode  加载节点的回调函数
 
 //data属性结构说明:
 //     {
 //         label:'xxx',    节点文本
 //         id:'xxx',       节点id
 //         children:[]     节点下的子节点
-//                          (1.如果配置项中的isAsync为true的话,children存在即代表有下级节点并生成相应的展开按钮;)
-//                          (2.如果配置项中的isAsync为false的话,children存在并且children的长度大于0即代表有下级节点并生成相应的展开按钮;)
 //     }
+//(1.如果配置项中的isAsync为true的话,children存在即代表有下级节点并生成相应的展开按钮;)
+//(2.如果配置项中的isAsync为false的话,children存在并且children的长度大于0即代表有下级节点并生成相应的展开按钮;)
 // ============================================
 class AjaxTree {
-    constructor({id, data, itemKey, isExpand, isAsync}) {
+    constructor({id, data, itemKey, isExpand, isAsync, loadNode}) {
         //指定容器;
         this.contain = document.querySelector(id);
         //节点元素绑定事件
@@ -28,9 +29,9 @@ class AjaxTree {
         //节点事件
         this.subNode = (e) => {
             let liEl = e.target.parentNode;
-            let nodeData = this.subNode.prototype.children;
+            let childrenData = this.subNode.prototype.children;
             let resultEl = null;
-            if (nodeData && nodeData.length > 0) {
+            if (childrenData && childrenData.length > 0) {
                 if (liEl.dataset.expand == 'true') {
                     let rmELs = liEl.getElementsByTagName('ul');
                     for (let i = 0; i < rmELs.length; i++) {
@@ -38,10 +39,33 @@ class AjaxTree {
                     }
                     liEl.dataset.expand = false;
                 } else {
-                    resultEl = this.createunExpandListEls(nodeData);
+                    resultEl = this.createunExpandListEls(childrenData);
                     liEl.appendChild(resultEl);
                     liEl.dataset.expand = true;
                 }
+            } else {
+                liEl.dataset.loading = '';
+            }
+            if (loadNode && childrenData.length <= 0) {
+                const nodeData = {
+                    label: liEl.querySelector('span').innerHTML,
+                    id: liEl.dataset.itemId,
+                    children: childrenData
+                };
+                new Promise((resolve, reject) => {
+                    loadNode(nodeData, resolve, reject);
+                })
+                    .then((result) => {
+                        liEl.dataset.expand = true;
+                        delete liEl.dataset.loading;
+                        childrenData.push(...result);
+                        let resultEl = this.createunExpandListEls(result);
+                        liEl.appendChild(resultEl);
+                    })
+                    .catch((error) => {
+                        delete liEl.dataset.loading;
+                        throw new Error(error);
+                    })
             }
         };
         //创建未展开状态list数据元素;
