@@ -25,8 +25,8 @@ class AjaxTree {
                 this.subNode.prototype = data;
                 this.subNode(e);
             });
-        }
-        //节点事件
+        };
+        //节点事件回调
         this.subNode = (e) => {
             let liEl = e.target.parentNode;
             let childrenData = this.subNode.prototype.children;
@@ -46,24 +46,28 @@ class AjaxTree {
             } else {
                 liEl.dataset.loading = '';
             }
+            this.lodeNode(childrenData, liEl);
+        };
+        //加载节点回调
+        this.lodeNode = (childrenData, el) => {
             if (loadNode && childrenData.length <= 0) {
                 const nodeData = {
-                    label: liEl.querySelector('span').innerHTML,
-                    id: liEl.dataset.itemId,
+                    label: el.querySelector('span').innerHTML,
+                    id: el.dataset.itemId,
                     children: childrenData
                 };
                 new Promise((resolve, reject) => {
                     loadNode(nodeData, resolve, reject);
                 })
                     .then((result) => {
-                        liEl.dataset.expand = true;
-                        delete liEl.dataset.loading;
+                        el.dataset.expand = true;
+                        delete el.dataset.loading;
                         childrenData.push(...result);
                         let resultEl = this.createunExpandListEls(result);
-                        liEl.appendChild(resultEl);
+                        el.appendChild(resultEl);
                     })
                     .catch((error) => {
-                        delete liEl.dataset.loading;
+                        delete el.dataset.loading;
                         throw new Error(error);
                     })
             }

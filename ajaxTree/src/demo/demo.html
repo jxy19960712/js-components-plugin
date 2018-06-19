@@ -13,9 +13,8 @@
 </div>
 </body>
 <script src="../js/index.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
-    let syncData = [
+    const syncData = [
         {
             value: 'data1',
             nodeCode: '0',
@@ -87,13 +86,13 @@
             nodeCode: '4'
         }
     ];
-    let syncKey = {
+    const syncKey = {
         label: 'value',
         id: 'nodeCode',
         children: 'children'
     };
 
-    let asyncData = [
+    const asyncData = [
         {
             label: 'data1',
             nodeCode: '0',
@@ -147,7 +146,7 @@
             nodeCode: '4'
         }
     ];
-    let asyncKey = {
+    const asyncKey = {
         label: 'label',
         id: 'nodeCode',
         children: 'children'
