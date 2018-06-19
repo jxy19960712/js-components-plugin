@@ -4,9 +4,18 @@
 //data  树形结构的数据;
 //itemKey  树组件每一项的展示key与data中每一项的key相对照;
 //isExpand  初始化是否展开全部;
+
+//data属性结构说明:
+//     {
+//         label:'xxx',    节点文本
+//         id:'xxx',       节点id
+//         children:[]     节点下的子节点
+//                          (1.如果配置项中的isAsync为true的话,children存在即代表有下级节点并生成相应的展开按钮;)
+//                          (2.如果配置项中的isAsync为false的话,children存在并且children的长度大于0即代表有下级节点并生成相应的展开按钮;)
+//     }
 // ============================================
 class AjaxTree {
-    constructor({id, data, itemKey, isExpand}) {
+    constructor({id, data, itemKey, isExpand, isAsync}) {
         //指定容器;
         this.contain = document.querySelector(id);
         //节点元素绑定事件
@@ -25,7 +34,6 @@ class AjaxTree {
                 if (liEl.dataset.expand == 'true') {
                     let rmELs = liEl.getElementsByTagName('ul');
                     for (let i = 0; i < rmELs.length; i++) {
-                        debugger
                         liEl.removeChild(rmELs[i]);
                     }
                     liEl.dataset.expand = false;
@@ -45,7 +53,7 @@ class AjaxTree {
                     itemEl.dataset.itemId = val[itemKey.id];
                     const labelEl = document.createElement('span');
                     labelEl.innerHTML = val[itemKey.label];
-                    if (val.children && val.children.length > 0) {
+                    if (isAsync ? val[itemKey.children] : val[itemKey.children] && val[itemKey.children].length > 0) {
                         itemEl.dataset.expand = false;
                         const expandBtn = document.createElement('a');
                         this.bindSubNode(expandBtn, val);
@@ -77,8 +85,8 @@ class AjaxTree {
                 labelEl.innerHTML = data[itemKey.label];
                 itemEl.dataset.itemId = data[itemKey.id];
                 itemEl.appendChild(labelEl);
-                if (data[itemKey.children] && data[itemKey.children].length > 0) {
-                    itemEl.dataset.expand = true;
+                if (isAsync ? data[itemKey.children] : data[itemKey.children] && data[itemKey.children].length > 0) {
+                    itemEl.dataset.expand = data[itemKey.children].length > 0;
                     itemEl.appendChild(expandBtn);
                     itemEl.appendChild(this.createExpandedListEls(data[itemKey.children]));
                 }

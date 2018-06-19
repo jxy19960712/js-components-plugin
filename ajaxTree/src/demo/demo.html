@@ -14,76 +14,150 @@
 </body>
 <script src="../js/index.js"></script>
 <script>
+    let syncData = [
+        {
+            value: 'data1',
+            nodeCode: '0',
+            children: [
+                {
+                    value: 'data1-1',
+                    nodeCode: '01',
+                    children: [
+                        {
+                            value: 'data1-1-1',
+                            nodeCode: '011'
+                        },
+                        {
+                            value: 'data1-1-2',
+                            nodeCode: '012',
+                            children: [
+                                {
+                                    value: 'data1-1-2-1',
+                                    nodeCOde: '0121'
+                                },
+                                {
+                                    value: 'data1-1-2-2',
+                                    nodeCOde: '0122'
+                                }
+                            ]
+                        },
+                    ]
+                },
+                {
+                    value: 'data1-2',
+                    nodeCode: '01'
+                },
+            ]
+        },
+        {
+            value: 'data2',
+            nodeCode: '1',
+            children: [
+                {
+                    value: 'data2-1',
+                    nodeCode: '11'
+                },
+                {
+                    value: 'data2-2',
+                    nodeCode: '12',
+                    children: [
+                        {
+                            value: 'data2-2-1',
+                            nodeCode: '121'
+                        },
+                        {
+                            value: 'data2-2-2',
+                            nodeCode: '122'
+                        },
+                    ]
+                },
+            ]
+        },
+        {
+            value: 'data3',
+            nodeCode: '2'
+        },
+        {
+            value: 'data4',
+            nodeCode: '3'
+        },
+        {
+            value: 'data5',
+            nodeCode: '4'
+        }
+    ];
+    let syncKey = {
+        label: 'value',
+        id: 'nodeCode',
+        children: 'children'
+    };
+
+
+    let asyncData = [
+        {
+            label: 'data1',
+            nodeCode: '0',
+            children: [
+                {
+                    label: 'data1-1',
+                    nodeCode: '01',
+                    children: [
+                        {
+                            label: 'data1-1-1',
+                            nodeCode: '011'
+                        },
+                        {
+                            label: 'data1-1-2',
+                            nodeCode: '012',
+                            children: [
+                                {
+                                    label: 'data1-1-2-1',
+                                    nodeCOde: '0121'
+                                },
+                                {
+                                    label: 'data1-1-2-2',
+                                    nodeCOde: '0122',
+                                    children:[]
+                                }
+                            ]
+                        },
+                    ]
+                },
+                {
+                    label: 'data1-2',
+                    nodeCode: '01'
+                },
+            ]
+        },
+        {
+            label: 'data2',
+            nodeCode: '1',
+            children: []
+        },
+        {
+            label: 'data3',
+            nodeCode: '2'
+        },
+        {
+            label: 'data4',
+            nodeCode: '3'
+        },
+        {
+            label: 'data5',
+            nodeCode: '4'
+        }
+    ];
+    let asyncKey = {
+        label: 'label',
+        id: 'nodeCode',
+        children: 'children'
+    };
     new AjaxTree({
         id: '#ajaxTree',
-        data: [
-            {
-                value: 'data1',
-                nodeCode: '0',
-                children: [
-                    {
-                        value: 'data1-1',
-                        nodeCode: '00',
-                        children: [
-                            {
-                                value: 'data1-1-1',
-                                nodeCode: '00'
-                            },
-                            {
-                                value: 'data1-2-1',
-                                nodeCode: '01'
-                            },
-                        ]
-                    },
-                    {
-                        value: 'data1-2',
-                        nodeCode: '01'
-                    },
-                ]
-            },
-            {
-                value: 'data2',
-                nodeCode: '1',
-                children: [
-                    {
-                        value: 'data2-1',
-                        nodeCode: '00'
-                    },
-                    {
-                        value: 'data2-2',
-                        nodeCode: '01',
-                        children: [
-                            {
-                                value: 'data2-1',
-                                nodeCode: '00'
-                            },
-                            {
-                                value: 'data2-2',
-                                nodeCode: '01'
-                            },
-                        ]
-                    },
-                ]
-            },
-            {
-                value: 'data3',
-                nodeCode: '2'
-            },
-            {
-                value: 'data4',
-                nodeCode: '3'
-            },
-            {
-                value: 'data5',
-                nodeCode: '4'
-            }
-        ],
-        itemKey: {
-            label: 'value',
-            id: 'nodeCode',
-            children: 'children'
-        },
-        isExpand: true
+        data: asyncData,
+        itemKey: asyncKey,
+        isExpand: false,
+        isAsync: true
     });
 </script>
 </html>
