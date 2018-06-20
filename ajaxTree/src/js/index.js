@@ -63,8 +63,9 @@ class AjaxTree {
                     loadNode(nodeData, resolve, reject);
                 })
                     .then((result) => {
-                        el.dataset.expand = 'true';
                         delete el.dataset.loading;
+                        el.dataset.expand = 'true';
+                        //缓存数据已加载后的数据
                         childrenData.push(...result);
                         let resultEl = this.createunExpandListEls(result);
                         el.appendChild(resultEl);
