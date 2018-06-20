@@ -33,20 +33,23 @@ class AjaxTree {
             let resultEl = null;
             if (childrenData && childrenData.length > 0) {
                 if (liEl.dataset.expand == 'true') {
-                    let rmELs = liEl.getElementsByTagName('ul');
-                    for (let i = 0; i < rmELs.length; i++) {
+                    let rmELs = [].filter.call(liEl.children, val => val.tagName == 'UL')
+                    for (var i = rmELs.length - 1; i >= 0; i--) {
                         liEl.removeChild(rmELs[i]);
                     }
-                    liEl.dataset.expand = false;
+                    liEl.dataset.expand = 'false';
                 } else {
                     resultEl = this.createunExpandListEls(childrenData);
                     liEl.appendChild(resultEl);
-                    liEl.dataset.expand = true;
+                    liEl.dataset.expand = 'true';
                 }
             } else {
                 liEl.dataset.loading = '';
+                liEl.dataset.expand = 'true';
             }
-            this.lodeNode(childrenData, liEl);
+            if (liEl.dataset.expand == 'true') {
+                this.lodeNode(childrenData, liEl);
+            }
         };
         //加载节点回调
         this.lodeNode = (childrenData, el) => {
@@ -60,7 +63,7 @@ class AjaxTree {
                     loadNode(nodeData, resolve, reject);
                 })
                     .then((result) => {
-                        el.dataset.expand = true;
+                        el.dataset.expand = 'true';
                         delete el.dataset.loading;
                         childrenData.push(...result);
                         let resultEl = this.createunExpandListEls(result);
