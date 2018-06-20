@@ -5,7 +5,7 @@
 //itemKey  树组件每一项的展示key与data中每一项的key相对照;
 //isExpand  初始化是否展开全部;
 //loadNode  加载节点的回调函数
-
+// ----------------------------------
 //data属性结构说明:
 //     {
 //         label:'xxx',    节点文本
@@ -14,6 +14,29 @@
 //     }
 //(1.如果配置项中的isAsync为true的话,children存在即代表有下级节点并生成相应的展开按钮;)
 //(2.如果配置项中的isAsync为false的话,children存在并且children的长度大于0即代表有下级节点并生成相应的展开按钮;)
+// ----------------------------------
+//loadNode回调函数说明:
+//      loadNode(nodeData,resolve,reject){
+//          $.get("demo_ajax_load.txt", function(result){
+//              resolve(result)
+//          });
+//      }
+//参数说明:
+//     参数:nodeData
+//     类型:Object
+//     说明:当前节点的返回数据 {label:'', id:'', children:[]}
+//     可选值:_________
+
+//     参数:reslove
+//     类型:Function
+//     说明:传入需要加载节点的数据(类型必须为Array) [{label:'',id:'',children:[]},{label:'',id:'',children:[]}]
+//     可选值:Array
+
+//     参数:reject
+//     类型:Function
+//     说明:传入加载节点失败的信息
+//     可选值:String
+// ----------------------------------
 // ============================================
 class AjaxTree {
     constructor({id, data, itemKey, isExpand, isAsync, loadNode}) {
@@ -33,27 +56,33 @@ class AjaxTree {
             let resultEl = null;
             if (childrenData && childrenData.length > 0) {
                 if (liEl.dataset.expand == 'true') {
+                    //收起节点
                     let rmELs = [].filter.call(liEl.children, val => val.tagName == 'UL')
                     for (var i = rmELs.length - 1; i >= 0; i--) {
                         liEl.removeChild(rmELs[i]);
                     }
                     liEl.dataset.expand = 'false';
                 } else {
+                    //如果children已有数据则加载默认数据
                     resultEl = this.createunExpandListEls(childrenData);
                     liEl.appendChild(resultEl);
                     liEl.dataset.expand = 'true';
                 }
             } else {
-                liEl.dataset.loading = '';
+                liEl.dataset.loading = !liEl.dataset.loading ? 'true' : 'fasle';
                 liEl.dataset.expand = 'true';
+                //节点点击次数限制判断
+                if (liEl.dataset.loading == 'true') {
+                    this.lodeNode(childrenData, liEl);
+                }
             }
-            if (liEl.dataset.expand == 'true') {
-                this.lodeNode(childrenData, liEl);
-            }
+
         };
         //加载节点回调
         this.lodeNode = (childrenData, el) => {
             if (loadNode && childrenData.length <= 0) {
+                //节点点击次数限制
+                el.dataset.loading = 'false'
                 const nodeData = {
                     label: el.querySelector('span').innerHTML,
                     id: el.dataset.itemId,
@@ -64,7 +93,6 @@ class AjaxTree {
                 })
                     .then((result) => {
                         delete el.dataset.loading;
-                        el.dataset.expand = 'true';
                         //缓存数据已加载后的数据
                         childrenData.push(...result);
                         let resultEl = this.createunExpandListEls(result);
