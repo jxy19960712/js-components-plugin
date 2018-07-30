@@ -1,5 +1,4 @@
-# js-components-plugin
-This is a plugin library based on native js
+#原生js生成异步树插件
 ====================
 ----------------------------------------------------------------
 option说明:
