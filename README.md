@@ -1,6 +1,7 @@
 # js-components-plugin
 This is a plugin library based on native js
 ====================
+----------------------------------------------------------------
 option说明:
 -----------
 + id  放置组件容器元素的id;
