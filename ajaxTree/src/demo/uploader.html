@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<input id="myFile" type="file">
+<button onclick="Start()">上传</button>
+<button onclick="Pause()">暂停</button>
+<button onclick="Continue()">继续</button>
+<label>当前进度：<span id="progress"></span></label>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+    var uploadId = '';
+    var index = 1;
+    var pause = false; //暂停
+
+    function Start() {
+        index = 1;
+        uploadId = '';
+        Upload();
+    }
+
+    function Upload() {
+        var files = document.getElementById('myFile').files;
+        if (files.length < 1) {
+            alert('请选择文件~');
+            return;
+        }
+        var file = files[0];
+        var totalSize = file.size;//文件大小
+        var blockSize = 1024 * 1024 * 2;//块大小
+        var blockCount = Math.ceil(totalSize / blockSize);//总块数
+
+        //创建FormData对象
+        var formData = new FormData();
+        formData.append('fileName', file.name);//文件名
+        formData.append('total', blockCount);//总块数
+        formData.append('index', index);//当前上传的块下标
+        formData.append('uploadId', uploadId);//上传编号
+        formData.append('data', null);
+
+        UploadPost(file, formData, totalSize, blockCount, blockSize);
+    }
+
+    function UploadPost(file, formData, totalSize, blockCount, blockSize) {
+        if (pause) {
+            return; //暂停
+        }
+        try {
+            var start = index * blockSize;
+            var end = Math.min(totalSize, start + blockSize);
+            var block = file.slice(start, end);
+            formData.set('data', block);
+            formData.set('index', index);
+            formData.set('uploadId', uploadId);
+
+            $.ajax({
+                url: '',
+                type: 'post',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    block = null;
+                    if (res.Code === 1) {
+                        if (index === 1)
+                            uploadId = res.UploadID;
+
+                        $('#progress').text((index / blockCount * 100).toFixed(2) + '%');
+                        if (index < blockCount) {
+                            index++;
+                            UploadPost(file, formData, totalSize, blockCount, blockSize);
+                        }
+                    }
+                }
+            });
+        } catch (e) {
+            alert(e);
+        }
+    }
+    ///暂停
+    function Pause() {
+        pause = true;
+    }
+    //继续
+    function Continue() {
+        pause = false;
+        Upload();
+    }
+</script>
+</html>

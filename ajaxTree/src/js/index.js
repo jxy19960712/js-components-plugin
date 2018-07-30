@@ -73,13 +73,13 @@ class AjaxTree {
                 liEl.dataset.expand = 'true';
                 //节点点击次数限制判断
                 if (liEl.dataset.loading == 'true') {
-                    this.lodeNode(childrenData, liEl);
+                    this.loadNode(childrenData, liEl);
                 }
             }
 
         };
         //加载节点回调
-        this.lodeNode = (childrenData, el) => {
+        this.loadNode = (childrenData, el) => {
             if (loadNode && childrenData.length <= 0) {
                 //节点点击次数限制
                 el.dataset.loading = 'false'
@@ -113,7 +113,7 @@ class AjaxTree {
                     itemEl.dataset.itemId = val[itemKey.id];
                     const labelEl = document.createElement('span');
                     labelEl.innerHTML = val[itemKey.label];
-                    if (isAsync ? val[itemKey.children] : val[itemKey.children] && val[itemKey.children].length > 0) {
+                    if (isAsync ? val[itemKey.children] : (val[itemKey.children] && val[itemKey.children].length > 0)) {
                         itemEl.dataset.expand = false;
                         const expandBtn = document.createElement('a');
                         this.bindSubNode(expandBtn, val);
@@ -139,14 +139,14 @@ class AjaxTree {
             }
             else if (type == 'Object') {
                 const itemEl = document.createElement('li');
-                const expandBtn = document.createElement('a');
                 const labelEl = document.createElement('span');
-                this.bindSubNode(expandBtn, data);
                 labelEl.innerHTML = data[itemKey.label];
                 itemEl.dataset.itemId = data[itemKey.id];
                 itemEl.appendChild(labelEl);
-                if (isAsync ? data[itemKey.children] : data[itemKey.children] && data[itemKey.children].length > 0) {
+                if (isAsync ? data[itemKey.children] : (data[itemKey.children] && data[itemKey.children].length > 0)) {
                     itemEl.dataset.expand = data[itemKey.children].length > 0;
+                    const expandBtn = document.createElement('a');
+                    this.bindSubNode(expandBtn, data);
                     itemEl.appendChild(expandBtn);
                     itemEl.appendChild(this.createExpandedListEls(data[itemKey.children]));
                 }
